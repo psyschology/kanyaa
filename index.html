@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanyaa - Exquisite Sarees and Kurtis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles */
+        @keyframes logoAnimation {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .logo-animation {
+            animation: logoAnimation 2s ease-out;
+        }
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .modal-content.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Opening Animation -->
+    <div id="opening-animation" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <img src="kanyaa-logo.png" alt="Kanyaa Logo" class="w-32 h-32 logo-animation">
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+                <img src="kanyaa-logo.png" alt="Kanyaa Logo" class="w-24 h-auto">
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Home</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">About</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Section -->
+        <main class="container mx-auto px-4 py-8 flex">
+            <!-- Sidebar -->
+            <aside class="w-64 pr-8">
+                <h2 class="text-2xl font-bold mb-4">Categories</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Sarees</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Kurtis</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Accessories</a></li>
+                </ul>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+                <!-- Product items will be dynamically added here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full mx-4 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">&times;</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: 'Elegant Silk Saree', category: 'Sarees', image: 'saree1.jpg', description: 'A beautiful silk saree with intricate designs.', fabric: 'Silk', sizes: ['Free Size'], colors: ['Red', 'Blue', 'Green'], stock: 10 },
+            { id: 2, name: 'Casual Cotton Kurti', category: 'Kurtis', image: 'kurti1.jpg', description: 'A comfortable cotton kurti for everyday wear.', fabric: 'Cotton', sizes: ['S', 'M', 'L'], colors: ['White', 'Yellow'], stock: 15 },
+            // Add more products here
+        ];
+
+        // Function to create product cards
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105';
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
+                    <p class="text-gray-600">${product.category}</p>
+                    <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300" onclick="openModal(${product.id})">View Details</button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Function to populate product grid
+        function populateProductGrid() {
+            const grid = document.getElementById('product-grid');
+            products.forEach(product => {
+                grid.appendChild(createProductCard(product));
+            });
+        }
+
+        // Function to open product modal
+        function openModal(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('product-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            modalContent.innerHTML = `
+                <h2 class="text-2xl font-bold mb-4">${product.name}</h2>
+                <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover mb-4 rounded">
+                <p class="text-gray-700 mb-4">${product.description}</p>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <h3 class="font-semibold">Fabric:</h3>
+                        <p>${product.fabric}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Sizes:</h3>
+                        <p>${product.sizes.join(', ')}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Colors:</h3>
+                        <p>${product.colors.join(', ')}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">Stock:</h3>
+                        <p>${product.stock} available</p>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="tel:+1234567890" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300">Call Now</a>
+                    <a href="https://wa.me/1234567890" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300">Order on WhatsApp</a>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('.modal-content').classList.add('show');
+            }, 10);
+        }
+
+        // Function to close product modal
+        function closeModal() {
+            const modal = document.getElementById('product-modal');
+            modal.querySelector('.modal-content').classList.remove('show');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Event listener for closing modal
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+
+        // Function to hide opening animation and show main content
+        function showMainContent() {
+            document.getElementById('opening-animation').style.display = 'none';
+            document.getElementById('main-content').classList.remove('hidden');
+        }
+
+        // Initialize the website
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(showMainContent, 2000); // Show main content after 2 seconds
+            populateProductGrid();
+        });
+    </script>
+</body>
+</html>
