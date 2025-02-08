@@ -166,9 +166,95 @@
         .image-hover:hover img {
             transform: scale(1.1);
         }
+                /* Enhanced Mobile Sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .overlay {
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease-in-out;
+            }
+            
+            .overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* Search Results Dropdown */
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            transform-origin: top;
+            transition: all 0.3s ease;
+        }
+
+        .search-results.hidden {
+            transform: scaleY(0);
+            opacity: 0;
+        }
+
+        /* Enhanced Product Card Animations */
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Cart Animation */
+        @keyframes addToCart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .add-to-cart-animation {
+            animation: addToCart 0.3s ease-in-out;
+        }
+
+        /* Wishlist Animation */
+        @keyframes wishlistPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .wishlist-animation {
+            animation: wishlistPop 0.3s ease-in-out;
+        }
+
+        /* Enhanced Loading Animation */
+        .loading-spinner {
+            border: 3px solid rgba(139, 115, 85, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #8B7355;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-kanyaa-light">
+
+     <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 overlay" onclick="closeMobileMenu()"></div>
+    
     <!-- Opening Animation -->
     <div id="opening-animation" class="fixed inset-0 flex items-center justify-center bg-kanyaa-beige z-50">
         <div class="relative w-64 h-64">
@@ -181,7 +267,57 @@
             </div>
         </div>
     </div>
+<!-- Search Overlay -->
+    <div id="search-overlay" class="fixed inset-0 bg-black/50 z-50 hidden">
+        <div class="container mx-auto px-4 pt-20">
+            <div class="bg-white rounded-lg shadow-xl p-4 relative">
+                <button onclick="closeSearch()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        placeholder="Search for products..."
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-kanyaa-brown"
+                        oninput="handleSearch(this.value)"
+                    >
+                    <div id="search-results" class="absolute top-full left-0 right-0 bg-white mt-2 rounded-lg shadow-lg search-results hidden">
+                        <!-- Search results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-kanyaa-darkBrown">Shopping Cart</h2>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4">
+                <!-- Cart items will be populated here -->
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 bg-white border-t">
+                <div class="flex justify-between mb-4">
+                    <span class="font-semibold">Total:</span>
+                    <span id="cart-total" class="font-semibold">₹0</span>
+                </div>
+                <button onclick="checkout()" class="w-full bg-kanyaa-brown text-white px-4 py-2 rounded-lg hover:bg-kanyaa-darkBrown transition-colors">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Main Content -->
     <div id="main-content" class="hidden">
         <!-- Header -->
@@ -215,7 +351,25 @@
                 </div>
             </div>
         </header>
-
+<!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-8">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-08%20at%2018.18.14-g0mNbwXhcC5kVKWF6kaByGbfLKNZ7R.jpeg" alt="Kanyaa Logo" class="h-8">
+                    <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#featured" class="block text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors" onclick="closeMobileMenu()">Featured</a>
+                    <a href="#sarees" class="block text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors" onclick="closeMobileMenu()">Sarees</a>
+                    <a href="#kurtis" class="block text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors" onclick="closeMobileMenu()">Kurtis</a>
+                    <a href="#lehengas" class="block text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors" onclick="closeMobileMenu()">Lehengas</a>
+                </nav>
+            </div>
+        </div>
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed left-0 top-0 h-full bg-white shadow-lg z-30 sidebar w-64 pt-20">
             <div class="p-4">
@@ -303,7 +457,74 @@
                 </div>
             </section>
         </main>
+ <!-- Categories Section -->
+            <section class="py-16">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Shop by Category</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <a href="#sarees" class="group relative overflow-hidden rounded-lg aspect-square">
+                            <img src="saree-category.jpg" alt="Sarees" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                <h3 class="text-white text-2xl font-semibold">Sarees</h3>
+                            </div>
+                        </a>
+                        <!-- Add similar category cards for Kurtis, Lehengas, and Accessories -->
+                    </div>
+                </div>
+            </section>
 
+            <!-- Featured Products -->
+            <section id="featured" class="py-16 bg-kanyaa-beige/20">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Featured Collection</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="featured-grid">
+                        <!-- Products will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Sections -->
+            <section id="sarees" class="py-16">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Sarees</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="sarees-grid">
+                        <!-- Sarees will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="kurtis" class="py-16 bg-kanyaa-beige/20">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Kurtis</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="kurtis-grid">
+                        <!-- Kurtis will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Newsletter Section -->
+            <section class="py-16">
+                <div class="container mx-auto px-4">
+                    <div class="bg-kanyaa-darkBrown rounded-lg p-8 md:p-12">
+                        <div class="max-w-2xl mx-auto text-center">
+                            <h2 class="text-3xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
+                            <p class="text-kanyaa-beige mb-8">Stay updated with our latest collections and exclusive offers.</p>
+                            <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row gap-4">
+                                <input 
+                                    type="email" 
+                                    placeholder="Enter your email"
+                                    class="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-kanyaa-brown"
+                                    required
+                                >
+                                <button type="submit" class="bg-kanyaa-brown text-white px-8 py-3 rounded-lg hover:bg-kanyaa-beige hover:text-kanyaa-darkBrown transition-colors">
+                                    Subscribe
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
         <!-- Footer -->
         <footer class="bg-kanyaa-darkBrown text-white py-16">
             <div class="container mx-auto px-4">
@@ -365,7 +586,7 @@
         </div>
     </div>
 
-    <script>
+     <script>
         // Sample product data with more items
         const products = [
             {
@@ -392,10 +613,142 @@
                 colors: ['Navy Blue', 'Teal'],
                 stock: 15
             },
-            // Add more products...
+            // Add 20+ more products here with different variations
         ];
 
-        // Function to format price in Indian currency
+        // Cart and Wishlist State
+        let cart = [];
+        let wishlist = [];
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('translate-x-0');
+            document.getElementById('mobile-overlay').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.remove('translate-x-0');
+            document.getElementById('mobile-overlay').classList.remove('active');
+        }
+
+        // Search Functions
+        function openSearch() {
+            document.getElementById('search-overlay').classList.remove('hidden');
+            document.getElementById('search-input').focus();
+        }
+
+        function closeSearch() {
+            document.getElementById('search-overlay').classList.add('hidden');
+            document.getElementById('search-results').classList.add('hidden');
+        }
+
+        function handleSearch(query) {
+            const results = products.filter(product => 
+                product.name.toLowerCase().includes(query.toLowerCase()) ||
+                product.category.toLowerCase().includes(query.toLowerCase())
+            );
+
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (query.length > 0) {
+                resultsContainer.classList.remove('hidden');
+                results.forEach(product => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'flex items-center gap-4 p-4 hover:bg-gray-100 cursor-pointer';
+                    resultItem.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded">
+                        <div>
+                            <h3 class="font-semibold text-kanyaa-darkBrown">${product.name}</h3>
+                            <p class="text-sm text-kanyaa-brown">${formatPrice(product.price)}</p>
+                        </div>
+                    `;
+                    resultItem.onclick = () => {
+                        openModal(product.id);
+                        closeSearch();
+                    };
+                    resultsContainer.appendChild(resultItem);
+                });
+            } else {
+                resultsContainer.classList.add('hidden');
+            }
+        }
+
+        // Cart Functions
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            cartSidebar.classList.toggle('translate-x-full');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            animateCartIcon();
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-4">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-kanyaa-darkBrown">${item.name}</h3>
+                        <p class="text-sm text-kanyaa-brown">${formatPrice(item.price)} × ${item.quantity}</p>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+
+            cartTotal.textContent = formatPrice(
+                cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+            );
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function animateCartIcon() {
+            const cartIcon = document.querySelector('button[onclick="toggleCart()"] svg');
+            cartIcon.classList.add('add-to-cart-animation');
+            setTimeout(() => cartIcon.classList.remove('add-to-cart-animation'), 300);
+        }
+
+        // Wishlist Functions
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index === -1) {
+                wishlist.push(productId);
+            } else {
+                wishlist.splice(index, 1);
+            }
+            updateWishlistUI();
+        }
+
+        function updateWishlistUI() {
+            const wishlistCount = document.getElementById('wishlist-count');
+            wishlistCount.textContent = wishlist.length;
+        }
+
+        // Utility Functions
         function formatPrice(price) {
             return new Intl.NumberFormat('en-IN', {
                 style: 'currency',
@@ -403,135 +756,17 @@
             }).format(price);
         }
 
-        // Function to create product cards
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card bg-white rounded-xl shadow-lg overflow-hidden';
-            card.innerHTML = `
-                <div class="image-hover">
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover">
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold text-kanyaa-darkBrown mb-2">${product.name}</h3>
-                    <p class="text-kanyaa-brown mb-4">${formatPrice(product.price)}</p>
-                    <div class="flex space-x-2">
-                        <button onclick="openModal(${product.id})" class="flex-1 bg-kanyaa-brown text-white px-4 py-2 rounded-lg hover:bg-kanyaa-darkBrown transition-colors">
-                            View Details
-                        </button>
-                        <button class="p-2 text-kanyaa-brown hover:text-kanyaa-darkBrown border border-current rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
-            return card;
+        function scrollToFeatured() {
+            document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Function to populate product grids
-        function populateProductGrids() {
-            const featuredGrid = document.getElementById('featured-grid');
-            const sareesGrid = document.getElementById('sarees-grid');
-            const kurtisGrid = document.getElementById('kurtis-grid');
-
-            products.forEach(product => {
-                if (product.category === 'Sarees') {
-                    sareesGrid.appendChild(createProductCard(product));
-                } else if (product.category === 'Kurtis') {
-                    kurtisGrid.appendChild(createProductCard(product));
-                }
-                
-                // Add some products to featured section
-                if (product.id <= 4) {
-                    featuredGrid.appendChild(createProductCard(product));
-                }
-            });
+        // Newsletter Function
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing with ${email}! We'll keep you updated.`);
+            event.target.reset();
         }
-
-        // Function to open product modal
-        function openModal(productId) {
-            const product = products.find(p => p.id === productId);
-            const modal = document.getElementById('product-modal');
-            const modalContent = document.getElementById('modal-content');
-
-            modalContent.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="image-hover rounded-lg overflow-hidden">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-[500px] object-cover">
-                    </div>
-                    <div class="space-y-6">
-                        <div>
-                            <h2 class="text-3xl font-bold text-kanyaa-darkBrown">${product.name}</h2>
-                            <p class="text-2xl font-semibold text-kanyaa-brown mt-2">${formatPrice(product.price)}</p>
-                        </div>
-                        <p class="text-gray-600">${product.description}</p>
-                        <div class="space-y-4">
-                            <div>
-                                <h3 class="font-semibold text-kanyaa-darkBrown">Fabric</h3>
-                                <p class="text-gray-600">${product.fabric}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-kanyaa-darkBrown">Available Sizes</h3>
-                                <div class="flex gap-2 mt-2">
-                                    ${product.sizes.map(size => `
-                                        <button class="px-4 py-2 border border-kanyaa-brown text-kanyaa-brown rounded-lg hover:bg-kanyaa-brown hover:text-white transition-colors">
-                                            ${size}
-                                        </button>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-kanyaa-darkBrown">Colors</h3>
-                                <div class="flex gap-2 mt-2">
-                                    ${product.colors.map(color => `
-                                        <button class="px-4 py-2 border border-kanyaa-brown text-kanyaa-brown rounded-lg hover:bg-kanyaa-brown hover:text-white transition-colors">
-                                            ${color}
-                                        </button>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <p class="text-sm text-gray-500">Stock: ${product.stock} available</p>
-                            <div class="flex gap-4">
-                                <a href="https://wa.me/1234567890" target="_blank" class="flex-1 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors text-center">
-                                    Order on WhatsApp
-                                </a>
-                                <a href="tel:+1234567890" class="flex-1 bg-kanyaa-brown text-white px-6 py-3 rounded-lg hover:bg-kanyaa-darkBrown transition-colors text-center">
-                                    Call Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.querySelector('.modal-content').classList.add('show');
-            }, 10);
-        }
-
-        // Function to close product modal
-        function closeModal() {
-            const modal = document.getElementById('product-modal');
-            modal.querySelector('.modal-content').classList.remove('show');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Function to toggle sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
-            document.querySelector('main').classList.toggle('pl-20');
-        }
-
-        // Event listeners
-        document.getElementById('close-modal').addEventListener('click', closeModal);
-        document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -539,16 +774,23 @@
                 document.getElementById('opening-animation').style.display = 'none';
                 document.getElementById('main-content').classList.remove('hidden');
             }, 2000);
-            populateProductGrids();
-        });
+            
+            // Populate product grids
+            const featuredGrid = document.getElementById('featured-grid');
+            const sareesGrid = document.getElementById('sarees-grid');
+            const kurtisGrid = document.getElementById('kurtis-grid');
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+            products.forEach(product => {
+                const card = createProductCard(product);
+                if (product.category === 'Sarees') {
+                    sareesGrid.appendChild(card.cloneNode(true));
+                } else if (product.category === 'Kurtis') {
+                    kurtisGrid.appendChild(card.cloneNode(true));
+                }
+                
+                if (product.id <= 8) {
+                    featuredGrid.appendChild(card);
+                }
             });
         });
     </script>
