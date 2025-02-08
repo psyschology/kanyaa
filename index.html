@@ -3,111 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanyaa - Exquisite Sarees and Kurtis</title>
+    <title>Kanyaa - Elegant Indian Fashion</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kanyaa: {
+                            beige: '#D4C4B4',
+                            brown: '#8B7355',
+                            darkBrown: '#594A3C',
+                            blue: '#4A6670',
+                            light: '#F5F0EB',
+                        }
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    },
+                    animation: {
+                        fadeIn: 'fadeIn 0.5s ease-out',
+                        slideIn: 'slideIn 0.5s ease-out',
+                        float: 'float 3s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Custom styles */
-        @keyframes logoAnimation {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --primary-font: 'Playfair Display', serif;
+            --secondary-font: 'Poppins', sans-serif;
         }
+
+        body {
+            font-family: var(--secondary-font);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--primary-font);
+        }
+
+        /* Logo Animation */
+        @keyframes logoReveal {
+            0% { 
+                clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+                opacity: 0;
+            }
+            30% {
+                clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 0);
+                opacity: 1;
+            }
+            100% {
+                clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes lotusFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
         .logo-animation {
-            animation: logoAnimation 2s ease-out;
+            animation: logoReveal 2s ease-out forwards;
         }
+
+        .lotus-float {
+            animation: lotusFloat 4s ease-in-out infinite;
+        }
+
+        /* Smooth Scrollbar */
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-kanyaa-light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-kanyaa-brown);
+            border-radius: 4px;
+        }
+
+        /* Product Card Hover Effect */
+        .product-card {
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Modal Animation */
         .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.5);
-            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
+
         .modal-content {
             transform: scale(0.9);
             opacity: 0;
             transition: all 0.3s ease;
         }
+
         .modal-content.show {
             transform: scale(1);
             opacity: 1;
         }
+
+        /* Sidebar Animation */
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        /* Category Pills */
+        .category-pill {
+            transition: all 0.3s ease;
+        }
+
+        .category-pill:hover {
+            transform: translateX(5px);
+        }
+
+        /* Image Hover Effect */
+        .image-hover {
+            overflow: hidden;
+        }
+
+        .image-hover img {
+            transition: all 0.5s ease;
+        }
+
+        .image-hover:hover img {
+            transform: scale(1.1);
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-kanyaa-light">
     <!-- Opening Animation -->
-    <div id="opening-animation" class="fixed inset-0 flex items-center justify-center bg-white z-50">
-        <img src="kanyaa-logo.png" alt="Kanyaa Logo" class="w-32 h-32 logo-animation">
+    <div id="opening-animation" class="fixed inset-0 flex items-center justify-center bg-kanyaa-beige z-50">
+        <div class="relative w-64 h-64">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-08%20at%2018.18.14-g0mNbwXhcC5kVKWF6kaByGbfLKNZ7R.jpeg" alt="Kanyaa Logo" class="w-full h-full logo-animation">
+            <div class="lotus-float absolute top-0 right-0">
+                <!-- Animated Lotus SVG -->
+                <svg width="40" height="40" viewBox="0 0 40 40" class="fill-kanyaa-brown">
+                    <!-- Add lotus SVG path here -->
+                </svg>
+            </div>
+        </div>
     </div>
 
     <!-- Main Content -->
     <div id="main-content" class="hidden">
         <!-- Header -->
-        <header class="bg-white shadow-md">
-            <div class="container mx-auto px-4 py-6 flex justify-between items-center">
-                <img src="kanyaa-logo.png" alt="Kanyaa Logo" class="w-24 h-auto">
-                <nav>
-                    <ul class="flex space-x-4">
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Home</a></li>
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">About</a></li>
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Contact</a></li>
-                    </ul>
+        <header class="bg-white shadow-md fixed w-full top-0 z-40">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-kanyaa-brown hover:text-kanyaa-darkBrown">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-08%20at%2018.18.14-g0mNbwXhcC5kVKWF6kaByGbfLKNZ7R.jpeg" alt="Kanyaa Logo" class="h-12">
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors">Home</a>
+                    <a href="#" class="text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors">Collections</a>
+                    <a href="#" class="text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors">About</a>
+                    <a href="#" class="text-kanyaa-brown hover:text-kanyaa-darkBrown transition-colors">Contact</a>
                 </nav>
+                <div class="flex items-center space-x-4">
+                    <button class="text-kanyaa-brown hover:text-kanyaa-darkBrown">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                    <button class="text-kanyaa-brown hover:text-kanyaa-darkBrown">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
 
-        <!-- Main Section -->
-        <main class="container mx-auto px-4 py-8 flex">
-            <!-- Sidebar -->
-            <aside class="w-64 pr-8">
-                <h2 class="text-2xl font-bold mb-4">Categories</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Sarees</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Kurtis</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-gray-900">Accessories</a></li>
-                </ul>
-            </aside>
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed left-0 top-0 h-full bg-white shadow-lg z-30 sidebar w-64 pt-20">
+            <div class="p-4">
+                <h2 class="text-xl font-semibold text-kanyaa-darkBrown mb-6">Categories</h2>
+                <div class="space-y-2">
+                    <a href="#sarees" class="category-pill flex items-center space-x-2 text-kanyaa-brown hover:text-kanyaa-darkBrown p-2 rounded-lg hover:bg-kanyaa-beige/20">
+                        <span>Sarees</span>
+                    </a>
+                    <a href="#kurtis" class="category-pill flex items-center space-x-2 text-kanyaa-brown hover:text-kanyaa-darkBrown p-2 rounded-lg hover:bg-kanyaa-beige/20">
+                        <span>Kurtis</span>
+                    </a>
+                    <a href="#lehengas" class="category-pill flex items-center space-x-2 text-kanyaa-brown hover:text-kanyaa-darkBrown p-2 rounded-lg hover:bg-kanyaa-beige/20">
+                        <span>Lehengas</span>
+                    </a>
+                    <a href="#accessories" class="category-pill flex items-center space-x-2 text-kanyaa-brown hover:text-kanyaa-darkBrown p-2 rounded-lg hover:bg-kanyaa-beige/20">
+                        <span>Accessories</span>
+                    </a>
+                </div>
 
-            <!-- Product Grid -->
-            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
-                <!-- Product items will be dynamically added here -->
+                <h2 class="text-xl font-semibold text-kanyaa-darkBrown mt-8 mb-6">Filters</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-kanyaa-brown mb-2">Price Range</h3>
+                        <input type="range" min="0" max="100" class="w-full accent-kanyaa-brown">
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-kanyaa-brown mb-2">Colors</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="w-6 h-6 rounded-full bg-red-500"></button>
+                            <button class="w-6 h-6 rounded-full bg-blue-500"></button>
+                            <button class="w-6 h-6 rounded-full bg-green-500"></button>
+                            <button class="w-6 h-6 rounded-full bg-yellow-500"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </aside>
+
+        <!-- Main Section -->
+        <main class="pt-20 pl-64 min-h-screen">
+            <!-- Hero Section -->
+            <section class="bg-kanyaa-beige/30 py-16">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-col md:flex-row items-center justify-between">
+                        <div class="md:w-1/2 space-y-6">
+                            <h1 class="text-4xl md:text-6xl font-bold text-kanyaa-darkBrown">Discover Timeless Elegance</h1>
+                            <p class="text-lg text-kanyaa-brown">Explore our collection of handcrafted sarees and kurtis that blend traditional artistry with contemporary design.</p>
+                            <button class="bg-kanyaa-brown text-white px-8 py-3 rounded-lg hover:bg-kanyaa-darkBrown transition-colors">
+                                Shop Now
+                            </button>
+                        </div>
+                        <div class="md:w-1/2 mt-8 md:mt-0">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-08%20at%2018.18.14-g0mNbwXhcC5kVKWF6kaByGbfLKNZ7R.jpeg" alt="Hero Image" class="w-full max-w-md mx-auto">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section id="featured" class="py-16">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Featured Collection</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="featured-grid">
+                        <!-- Products will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Sections -->
+            <section id="sarees" class="py-16 bg-kanyaa-beige/20">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Sarees</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="sarees-grid">
+                        <!-- Sarees will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="kurtis" class="py-16">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-kanyaa-darkBrown mb-8">Kurtis</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="kurtis-grid">
+                        <!-- Kurtis will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
         </main>
+
+        <!-- Footer -->
+        <footer class="bg-kanyaa-darkBrown text-white py-16">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-08%20at%2018.18.14-g0mNbwXhcC5kVKWF6kaByGbfLKNZ7R.jpeg" alt="Kanyaa Logo" class="h-12 mb-4">
+                        <p class="text-sm text-gray-300">Celebrating the art of traditional Indian fashion with modern aesthetics.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white">Size Guide</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white">FAQs</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                <span>contact@kanyaa.com</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                </svg>
+                                <span>+1 234 567 890</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                        <form class="space-y-4">
+                            <input type="email" placeholder="Your email" class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:border-white">
+                            <button type="submit" class="w-full bg-white text-kanyaa-darkBrown px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Product Modal -->
-    <div id="product-modal" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="modal-overlay absolute inset-0"></div>
-        <div class="modal-content bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full mx-4 relative">
-            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">&times;</button>
-            <div id="modal-content"></div>
+    <div id="product-modal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-overlay absolute inset-0 bg-black/50"></div>
+        <div class="modal-content bg-white rounded-xl shadow-xl p-8 max-w-4xl w-full mx-4 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <div id="modal-content" class="mt-2"></div>
         </div>
     </div>
 
     <script>
-        // Sample product data
+        // Sample product data with more items
         const products = [
-            { id: 1, name: 'Elegant Silk Saree', category: 'Sarees', image: 'saree1.jpg', description: 'A beautiful silk saree with intricate designs.', fabric: 'Silk', sizes: ['Free Size'], colors: ['Red', 'Blue', 'Green'], stock: 10 },
-            { id: 2, name: 'Casual Cotton Kurti', category: 'Kurtis', image: 'kurti1.jpg', description: 'A comfortable cotton kurti for everyday wear.', fabric: 'Cotton', sizes: ['S', 'M', 'L'], colors: ['White', 'Yellow'], stock: 15 },
-            // Add more products here
+            {
+                id: 1,
+                name: 'Banarasi Silk Saree',
+                category: 'Sarees',
+                price: 15999,
+                image: 'saree1.jpg',
+                description: 'Handwoven Banarasi silk saree with intricate zari work.',
+                fabric: 'Pure Silk',
+                sizes: ['Free Size'],
+                colors: ['Maroon', 'Gold'],
+                stock: 5
+            },
+            {
+                id: 2,
+                name: 'Embroidered Anarkali Kurti',
+                category: 'Kurtis',
+                price: 4999,
+                image: 'kurti1.jpg',
+                description: 'Designer Anarkali kurti with mirror work and embroidery.',
+                fabric: 'Georgette',
+                sizes: ['S', 'M', 'L', 'XL'],
+                colors: ['Navy Blue', 'Teal'],
+                stock: 15
+            },
+            // Add more products...
         ];
+
+        // Function to format price in Indian currency
+        function formatPrice(price) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR'
+            }).format(price);
+        }
 
         // Function to create product cards
         function createProductCard(product) {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105';
+            card.className = 'product-card bg-white rounded-xl shadow-lg overflow-hidden';
             card.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
-                    <p class="text-gray-600">${product.category}</p>
-                    <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300" onclick="openModal(${product.id})">View Details</button>
+                <div class="image-hover">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-kanyaa-darkBrown mb-2">${product.name}</h3>
+                    <p class="text-kanyaa-brown mb-4">${formatPrice(product.price)}</p>
+                    <div class="flex space-x-2">
+                        <button onclick="openModal(${product.id})" class="flex-1 bg-kanyaa-brown text-white px-4 py-2 rounded-lg hover:bg-kanyaa-darkBrown transition-colors">
+                            View Details
+                        </button>
+                        <button class="p-2 text-kanyaa-brown hover:text-kanyaa-darkBrown border border-current rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             `;
             return card;
         }
 
-        // Function to populate product grid
-        function populateProductGrid() {
-            const grid = document.getElementById('product-grid');
+        // Function to populate product grids
+        function populateProductGrids() {
+            const featuredGrid = document.getElementById('featured-grid');
+            const sareesGrid = document.getElementById('sarees-grid');
+            const kurtisGrid = document.getElementById('kurtis-grid');
+
             products.forEach(product => {
-                grid.appendChild(createProductCard(product));
+                if (product.category === 'Sarees') {
+                    sareesGrid.appendChild(createProductCard(product));
+                } else if (product.category === 'Kurtis') {
+                    kurtisGrid.appendChild(createProductCard(product));
+                }
+                
+                // Add some products to featured section
+                if (product.id <= 4) {
+                    featuredGrid.appendChild(createProductCard(product));
+                }
             });
         }
 
@@ -118,30 +456,54 @@
             const modalContent = document.getElementById('modal-content');
 
             modalContent.innerHTML = `
-                <h2 class="text-2xl font-bold mb-4">${product.name}</h2>
-                <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover mb-4 rounded">
-                <p class="text-gray-700 mb-4">${product.description}</p>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <h3 class="font-semibold">Fabric:</h3>
-                        <p>${product.fabric}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="image-hover rounded-lg overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-[500px] object-cover">
                     </div>
-                    <div>
-                        <h3 class="font-semibold">Sizes:</h3>
-                        <p>${product.sizes.join(', ')}</p>
+                    <div class="space-y-6">
+                        <div>
+                            <h2 class="text-3xl font-bold text-kanyaa-darkBrown">${product.name}</h2>
+                            <p class="text-2xl font-semibold text-kanyaa-brown mt-2">${formatPrice(product.price)}</p>
+                        </div>
+                        <p class="text-gray-600">${product.description}</p>
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-semibold text-kanyaa-darkBrown">Fabric</h3>
+                                <p class="text-gray-600">${product.fabric}</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-kanyaa-darkBrown">Available Sizes</h3>
+                                <div class="flex gap-2 mt-2">
+                                    ${product.sizes.map(size => `
+                                        <button class="px-4 py-2 border border-kanyaa-brown text-kanyaa-brown rounded-lg hover:bg-kanyaa-brown hover:text-white transition-colors">
+                                            ${size}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-kanyaa-darkBrown">Colors</h3>
+                                <div class="flex gap-2 mt-2">
+                                    ${product.colors.map(color => `
+                                        <button class="px-4 py-2 border border-kanyaa-brown text-kanyaa-brown rounded-lg hover:bg-kanyaa-brown hover:text-white transition-colors">
+                                            ${color}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-sm text-gray-500">Stock: ${product.stock} available</p>
+                            <div class="flex gap-4">
+                                <a href="https://wa.me/1234567890" target="_blank" class="flex-1 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors text-center">
+                                    Order on WhatsApp
+                                </a>
+                                <a href="tel:+1234567890" class="flex-1 bg-kanyaa-brown text-white px-6 py-3 rounded-lg hover:bg-kanyaa-darkBrown transition-colors text-center">
+                                    Call Now
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-semibold">Colors:</h3>
-                        <p>${product.colors.join(', ')}</p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold">Stock:</h3>
-                        <p>${product.stock} available</p>
-                    </div>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="tel:+1234567890" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300">Call Now</a>
-                    <a href="https://wa.me/1234567890" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300">Order on WhatsApp</a>
                 </div>
             `;
 
@@ -160,19 +522,34 @@
             }, 300);
         }
 
-        // Event listener for closing modal
-        document.getElementById('close-modal').addEventListener('click', closeModal);
-
-        // Function to hide opening animation and show main content
-        function showMainContent() {
-            document.getElementById('opening-animation').style.display = 'none';
-            document.getElementById('main-content').classList.remove('hidden');
+        // Function to toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            document.querySelector('main').classList.toggle('pl-20');
         }
 
-        // Initialize the website
+        // Event listeners
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+        document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(showMainContent, 2000); // Show main content after 2 seconds
-            populateProductGrid();
+            setTimeout(() => {
+                document.getElementById('opening-animation').style.display = 'none';
+                document.getElementById('main-content').classList.remove('hidden');
+            }, 2000);
+            populateProductGrids();
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>
